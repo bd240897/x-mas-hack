@@ -1,0 +1,11 @@
+version: '3'
+services:
+  back:
+    # Берем Dockerfile из каталога app
+#    build:
+#      context: ./api
+#      dockerfile: Dockerfile
+#     Запускаем тестовый сервер
+#    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8501:8501"
