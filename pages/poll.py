@@ -12,9 +12,14 @@ except:
 
 # on click - callback on_change
 def send_poll():
+    print(st.session_state.answers_weight_list)
     st.session_state['IS_POLL_SHOW'] = False
-    user_status = calculate_user_status(st.session_state.answers_list)
+    user_status = calculate_user_status(st.session_state.answers_weight_list)
     st.session_state['user_status'] = user_status
+
+
+def show_poll():
+    st.session_state['IS_POLL_SHOW'] = True
 
 
 def go_to_portfolio():
@@ -27,5 +32,6 @@ if st.session_state['IS_POLL_SHOW']:
 else:
     st.header(f"Ваш статус:")
     st.header(f":blue[{st.session_state.user_status}]")
-    button_1 = st.button('Отравить', on_click=go_to_portfolio)
+    # button_1 = st.button('Перейти к портфелю', on_click=go_to_portfolio)
+    button_1 = st.button('Пройти опрос еще раз', on_click=show_poll)
 

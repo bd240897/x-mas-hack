@@ -1,90 +1,94 @@
 import streamlit as st
 import matplotlib.pyplot as plt
 
-
 try:
     a = st.session_state['user_status']
 except:
     st.session_state['user_status'] = 'Консервативный'
 
-def porfolio_1():
-    st.header("Консервативный портфель")
-    labels = ['Акции',
-              'Облигации',
-              ]
 
-    values = [90,
-              10,
-              ]
-    fig1, ax1 = plt.subplots()
-    ax1.pie(values, labels=labels)
-    ax1.axis('equal')
-    plt.show()
-    st.pyplot(fig1)
+def portfolio_1(type_info: str):
+    if type_info == 'graph':
+        st.write("Консервативный портфель")
+        labels = ['Акции',
+                  'Облигации',
+                  ]
 
-
-def porfolio_2():
-    st.header("Сбалансированный портфель")
-    labels = ['Акции',
-              'Облигации',
-              ]
-
-    values = [70,
-              30,
-              ]
-    fig1, ax1 = plt.subplots()
-    ax1.pie(values, labels=labels)
-    ax1.axis('equal')
-    plt.show()
-    st.pyplot(fig1)
-
-def porfolio_3():
-    st.header("Рискованный портфель")
-    labels = ['Акции',
-              'Облигации',
-              ]
-
-    values = [50,
-              50,
-              ]
-    fig1, ax1 = plt.subplots()
-    ax1.pie(values, labels=labels)
-    ax1.axis('equal')
-    plt.show()
-    st.pyplot(fig1)
+        values = [90,
+                  10,
+                  ]
+        fig1, ax1 = plt.subplots()
+        ax1.pie(values, labels=labels)
+        ax1.axis('equal')
+        plt.show()
+        st.pyplot(fig1)
+    elif type_info == "recommendation":
+        st.write("- инвестировать регулярно")
+        st.write("- покупать облигации, они являются наименее рискованным инструментом")
 
 
+
+def portfolio_2(type_info:str):
+    if type_info == 'graph':
+        st.write("Сбалансированный портфель")
+        labels = ['Акции',
+                  'Облигации',
+                  ]
+
+        values = [70,
+                  30,
+                  ]
+        fig1, ax1 = plt.subplots()
+        ax1.pie(values, labels=labels)
+        ax1.axis('equal')
+        plt.show()
+        st.pyplot(fig1)
+    elif type_info == "recommendation":
+        st.write("- инвестировать регулярно")
+        st.write("- покупать акции и облигации в заданном соотношении")
+
+def portfolio_3(type_info: str):
+    if type_info == 'graph':
+        st.write("Рискованный портфель")
+        labels = ['Акции',
+                  'Облигации',
+                  ]
+
+        values = [50,
+                  50,
+                  ]
+        fig1, ax1 = plt.subplots()
+        ax1.pie(values, labels=labels)
+        ax1.axis('equal')
+        plt.show()
+        st.pyplot(fig1)
+    elif type_info == "recommendation":
+        st.write("- инвестировать регулярно")
+        st.write("- покупать акции и облигации в заданном соотношении")
 
 # st.header("Section 2")
-#
 # st.header("Section 3")
-#
 # st.markdown("[Section 1](#section-1)")
 
 
-# st.experimental_set_query_params(
-#     show_map=True,
-#     selected=["asia", "america"],
-# )
+col1, col2, = st.columns(2)
 
-if st.session_state.user_status == "Консервативный":
-    porfolio_1()
-elif st.session_state.user_status == "Умеренный":
-    porfolio_2()
-elif st.session_state.user_status == "Рискованный":
-    porfolio_3()
+with col1:
+    st.header("Рекомендации")
+    if st.session_state.user_status == "Консервативный":
+        portfolio_1("recommendation")
+    elif st.session_state.user_status == "Умеренный":
+        portfolio_2("recommendation")
+    elif st.session_state.user_status == "Рискованный":
+        portfolio_3("recommendation")
 
+with col2:
+    st.header("Тип рекомендуемого портфеля")
+    if st.session_state.user_status == "Консервативный":
+        portfolio_1("graph")
+    elif st.session_state.user_status == "Умеренный":
+        portfolio_2("graph")
+    elif st.session_state.user_status == "Рискованный":
+        portfolio_3("graph")
+    st.write("* Соотношение акций и облигаций")
 
-
-
-
-
-
-def make_clickable(link):
-    text = link.split('=')[0]
-    return f'<a target="_blank" href="/">1234</a>'
-
-
-st.write(f'<a target="_blank" href="/">1234</a>', unsafe_allow_html=True)
-
-st.button('youtube', 'https://youtube.com/dataprofessor', 'Data Professor YouTube channel')
