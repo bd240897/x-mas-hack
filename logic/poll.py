@@ -19,13 +19,7 @@ def calculate_user_status(answers: list):
 
 def send_poll():
     """Отправить опрос"""
-
     st.session_state['IS_POLL_SHOW'] = False
-
-    # user_status = calculate_user_status(answers_list)
-    # st.session_state['user_status'] = user_status
-    # st.write(f":blue[{user_status}]")
-
 
 # on click - callback on_change
 def poll_questions():
