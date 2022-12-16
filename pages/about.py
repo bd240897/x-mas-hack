@@ -1,5 +1,8 @@
 import streamlit as st
 
+st.title('Это просто страница с мусором')
+
+
 # доп информация о странице
 st.set_page_config(
     page_title="Ex-stream-ly Cool App",

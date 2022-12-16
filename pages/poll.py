@@ -2,7 +2,7 @@ import streamlit as st
 from logic.poll import calculate_user_status, poll_questions
 import os
 
-st.title('Страница опроса :sunglasses:')
+st.title('Это страница опроса :sunglasses:')
 
 try:
     a = st.session_state['IS_POLL_SHOW']
