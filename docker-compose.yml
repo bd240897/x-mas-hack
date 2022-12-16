@@ -6,6 +6,6 @@ services:
       context: .
       dockerfile: Dockerfile
 #     Запускаем тестовый сервер
-#    command: python manage.py runserver 0.0.0.0:8000
+    command: streamlit run app.py --server.port=8501 --server.address=0.0.0.0
     ports:
       - "8501:8501"
