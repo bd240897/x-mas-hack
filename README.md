@@ -1,11 +1,6 @@
-# Web приложение для оценки здоровья домашнего питомца "Tail app"
-Проект на хакатон X-MAS HACK 2022
+# Проект на хакатон X-MAS HACK 2022
 
 Команда: **Сборная ХМН2 (1)**
-
-## Демо:
-=
-[![Watch the video](./materials/prototype_preview.png)](https://youtu.be/aSgtn1f2SU4;)
 
 ## Оглавление
 1. [Задача](#Задача)
