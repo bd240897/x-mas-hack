@@ -2,7 +2,7 @@ import streamlit as st
 import json
 import matplotlib.pyplot as plt
 
-st.title('Страница с подробным описанием портфеля')
+st.title('Пример страницы с более подробным описанием портфеля')
 
 # ГРУЗИМ ДАННЫЕ ИЗ JSON
 

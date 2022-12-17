@@ -14,8 +14,8 @@ def portfolio_1(type_info: str):
                   'Облигации',
                   ]
 
-        values = [90,
-                  10,
+        values = [10,
+                  90,
                   ]
         fig1, ax1 = plt.subplots()
         ax1.pie(values, labels=labels)
@@ -35,8 +35,8 @@ def portfolio_2(type_info:str):
                   'Облигации',
                   ]
 
-        values = [70,
-                  30,
+        values = [30,
+                  70,
                   ]
         fig1, ax1 = plt.subplots()
         ax1.pie(values, labels=labels)
