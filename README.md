@@ -4,7 +4,7 @@
 Команда: **Сборная ХМН2 (1)**
 
 ## Демо:
-=
+
 [![Watch the video](./materials/prototype_preview.png)](https://youtu.be/aSgtn1f2SU4;)
 
 ## Оглавление
