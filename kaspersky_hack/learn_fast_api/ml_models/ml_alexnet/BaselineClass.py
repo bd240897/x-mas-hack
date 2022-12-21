@@ -40,12 +40,15 @@ class BaseLine:
 
     ALLOWED_FILE_EXTENSION = ['JPG', "JPEG"]
 
-    def __init__(self, path_model_weight):
+    def __init__(self, path_model_weight: str):
+        """
+        :param path_model_weight: путь до весов модели
+        """
         self.path_model_weight = path_model_weight
 
         self._get_map_labels()
         self._get_transformer()
-        self._create_model()
+        self._get_model()
         self._load_model_weights()
 
     def _get_map_labels(self):
@@ -63,7 +66,7 @@ class BaseLine:
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         ])
 
-    def _create_model(self):
+    def _get_model(self):
         """Создание модели"""
 
         model_extractor = models.alexnet(weights=False)
