@@ -26,10 +26,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # КАТАЛОГИ
-if __name__ == '__main__':
-    BASE_DIR = r"C:\Games\Python_works\x-mas-hack\kaspersky_hack\learn_fast_api"
-else:
-    BASE_DIR = r"C:\Games\Python_works\x-mas-hack\kaspersky_hack\learn_fast_api"
+BASE_DIR = r"C:\Games\Python_works\x-mas-hack\kaspersky_hack\learn_fast_api"
 FOLDER_NAME = 'ml_models'
 PATH_MODEL_WEIGHTS = os.path.join(BASE_DIR, FOLDER_NAME, "ml_alexnet", 'alexnet_waights.pth')
 
@@ -41,9 +38,11 @@ IMG_PATH = os.path.join(BASE_DIR, FOLDER_NAME, "static", "1.jpg")
 class BaseLine:
     """Фильтр. Получает фото jpg и дает предсказание 1го из 2х классов"""
 
-    ALLOWED_FILE_EXTENSION = ['jpg', 'JPG', "JPEG"]
+    ALLOWED_FILE_EXTENSION = ['JPG', "JPEG"]
 
-    def __init__(self):
+    def __init__(self, path_model_weight):
+        self.path_model_weight = path_model_weight
+
         self._get_map_labels()
         self._get_transformer()
         self._create_model()
@@ -74,7 +73,7 @@ class BaseLine:
     def _load_model_weights(self):
         """Загрузка весов модели"""
 
-        self.model.load_state_dict(torch.load(PATH_MODEL_WEIGHTS))
+        self.model.load_state_dict(torch.load(self.path_model_weight))
 
     # ПРОВЕРКИ
 
@@ -102,24 +101,20 @@ class BaseLine:
         content = BytesIO(response.content)
 
         # Открытие изображения и его траснформация
-        loaded_img = Image.open(content)
+        opened_img = Image.open(content)
 
-        # трансформация данных
-        transformed_img = self.data_transforms(loaded_img)
-        return transformed_img
+        return opened_img
 
     def _load_img_by_path(self, img_path: str):
         """Открытие изображения и его траснформация по path"""
 
         # Открытие изображения и его траснформация
-        loaded_img = Image.open(img_path)
+        opened_img = Image.open(img_path)
 
         # проверка расширения файла
-        self._check_img_extension_by_path(loaded_img)
+        self._check_img_extension_by_path(opened_img)
 
-        # трансформация данных
-        transformed_img = self.data_transforms(loaded_img)
-        return transformed_img
+        return opened_img
 
     def _predict_block(self, opened_img: Image):
         """
@@ -129,10 +124,13 @@ class BaseLine:
         :return: предсказанный класс из self.get_map_labels()
         """
 
+        # трансформация данных
+        transformed_img = self.data_transforms(opened_img)
+
         # делаем предсказание
         with torch.no_grad():
             self.model.eval()
-            logit = self.model(opened_img.unsqueeze(0))
+            logit = self.model(transformed_img.unsqueeze(0))
             probs = torch.nn.functional.softmax(logit, dim=-1).numpy()
             id = np.argmax(probs)
             predicted_class = self.map_labels[id]
@@ -150,21 +148,29 @@ class BaseLine:
         opened_img = self._load_img_by_path(img_path)
         return self._predict_block(opened_img)
 
+    def predict_file_by_loaded_binary(self, opened_img: Image):
+        """Предсказать по открытому бинарному файлу"""
+
+        return self._predict_block(opened_img)
 
 if __name__ == '__main__':
     """
     Порядок запуска функций
     url - на входи принимает url картинки
-    img - на вход принимает картинку
+    path - на вход принимает картинку
+    loaded_binary - на вход принимает открытую бинарную картинку, например Image.open(...)
     """
-    type_input = "url"
+    type_input = "path"
 
-    model = BaseLine()
+    model = BaseLine(path_model_weight=PATH_MODEL_WEIGHTS)
 
     if type_input == "url":
         prediction = model.predict_file_by_url(url=IMG_URL)
     elif type_input == "path":
         prediction = model.predict_file_by_path(img_path=IMG_PATH)
+    elif type_input == "loaded_binary":
+        opened_img = Image.open(IMG_PATH)
+        prediction = model.predict_file_by_loaded_binary(opened_img=opened_img)
     else:
         prediction = "Ошибка в коде"
     print(prediction)
