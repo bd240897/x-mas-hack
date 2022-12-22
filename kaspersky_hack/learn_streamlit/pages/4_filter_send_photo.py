@@ -4,7 +4,7 @@ from PIL import Image
 import streamlit as st
 import requests
 
-from ml_models.ml_alexnet.BaselineClass import BaseLine
+from ml_models.filter.alexnet.BaselineClass import BaseLine
 
 
 def image_to_byte_array(image: Image) -> bytes:
@@ -23,12 +23,14 @@ def image_to_byte_array(image: Image) -> bytes:
 IMG_URL = r"https://p.calameoassets.com/160810152536-3dbd84e9398a3a4ccc1ad50cb4651692/p1.jpg"
 BACKEND_SEND_IMG_URL = "http://127.0.0.1:8000/send/img/"
 BACKEND_SEND_URL_URL = "http://127.0.0.1:8000/send/url/"
-PATH_MODEL_WEIGHTS = "./ml_models/ml_alexnet/alexnet_waights.pth"
+PATH_MODEL_WEIGHTS = "./ml_models/filter/alexnet/alexnet_waights.pth"
 
 st.write(f"## Выберите тип отправки фотографии")
+
 st.selectbox(
     'Какой тип отправки фото вы ходите?',
-    ('None', "send_url", "send_file", "send_file_local", "send_url_local"), key="type_input")
+    ('None', "send_url", "send_file", "send_url_local", "send_file_local"), key="type_input")
+
 st.markdown("""__Описание__: 
 - __send_url__ - url фотографии отправляется на FastApi
 - __send_file__ - файл фотографии *.jpg отправляется на FastApi
@@ -44,16 +46,16 @@ if st.session_state.type_input == "send_url":
     st.text_input(
         label="Введите url картинки",
         value=IMG_URL,
-        key="url_input", )
+        key="send_url_input")
 
-    if st.session_state.url_input:
+    if st.session_state.send_url_input:
         # открытие фотографии
-        st.image(st.session_state.url_input)
+        st.image(st.session_state.send_url_input)
         # кнопка отправки
-        send_button = st.button("Send photo")
+        st.button("Отправить", key="send_url_button")
         # логика отправки
 
-        if send_button:
+        if st.session_state.send_url_button:
             # img = Image.open(uploaded_file)
 
             response = requests.post(BACKEND_SEND_URL_URL, json={"url": IMG_URL})
@@ -77,10 +79,10 @@ elif st.session_state.type_input == "send_file":
         # открытие фотографии
         st.image(uploaded_file.read(), channels="BGR")
         # кнопка отправки
-        send_button = st.button("Send photo")
+        send_button = st.button("Отправить", key="send_file_button")
         # логика отправки
 
-        if send_button:
+        if st.session_state.send_file_button:
             img = Image.open(uploaded_file)
             response = requests.post(BACKEND_SEND_IMG_URL,
                                      files={"file": ('1.jpg', image_to_byte_array(img), 'image/jpeg')})
@@ -100,18 +102,18 @@ elif st.session_state.type_input == "send_url_local":
     st.text_input(
         label="Введите url картинки",
         value=IMG_URL,
-        key="url_input_local")
+        key="send_url_input_local")
 
-    if st.session_state.url_input_local:
+    if st.session_state.send_url_input_local:
         # открытие фотографии
-        st.image(st.session_state.url_input_local)
+        st.image(st.session_state.send_url_input_local)
         # кнопка отправки
-        send_button = st.button("Send photo")
+        send_button = st.button("Отправить", key="send_url_local_button")
         # логика отправки
 
-        if send_button:
+        if st.session_state.send_url_local_button:
             model = BaseLine(path_model_weight=PATH_MODEL_WEIGHTS)
-            prediction = model.predict_file_by_url(url=st.session_state.url_input_local)
+            prediction = model.predict_file_by_url(url=st.session_state.send_url_input_local)
             st.write(prediction)
 
 
@@ -125,9 +127,9 @@ elif st.session_state.type_input == "send_file_local":
         # открытие фотографии
         st.image(uploaded_file_local.read(), channels="BGR")
         # кнопка отправки
-        send_button = st.button("Send photo")
+        send_button = st.button("Отправить", key="send_url_file_button")
         # логика отправки
-        if send_button:
+        if st.session_state.send_url_file_button:
             model = BaseLine(path_model_weight=PATH_MODEL_WEIGHTS)
             opened_img = Image.open(uploaded_file_local)
             prediction = model.predict_file_by_loaded_binary(opened_img=opened_img)

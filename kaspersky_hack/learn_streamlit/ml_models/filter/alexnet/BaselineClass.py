@@ -155,9 +155,9 @@ if __name__ == '__main__':
     """
 
     # КАТАЛОГИ
-    BASE_DIR = r"C:\Games\Python_works\x-mas-hack\kaspersky_hack\learn_fast_api"
-    FOLDER_NAME = 'ml_models'
-    PATH_MODEL_WEIGHTS = os.path.join(BASE_DIR, FOLDER_NAME, "ml_alexnet", 'alexnet_waights.pth')
+    BASE_DIR = r"C:\Games\Python_works\x-mas-hack\kaspersky_hack\learn_streamlit"
+    FOLDER_NAME = os.path.join("ml_models", 'filter')
+    PATH_MODEL_WEIGHTS = os.path.join(BASE_DIR, FOLDER_NAME, "alexnet", 'alexnet_waights.pth')
 
     # КАРТИНКА
     IMG_URL = "https://p.calameoassets.com/160810152536-3dbd84e9398a3a4ccc1ad50cb4651692/p1.jpg"

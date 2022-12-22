@@ -32,7 +32,7 @@ def make_prediction(bad_to_eat, little_energy, rash, liquid_poop):
     return preds_class
 
 # https://stackoverflow.com/questions/60127234/how-to-use-a-pydantic-model-with-form-data-in-fastapi
-@app.post("/poll/") # , response_model=MlRequest
+@app.post("/send/poll/") # , response_model=MlRequest
 async def create_upload_file(parameters: MlRequest):
     """Загрузка файла"""
     prediction = 1
