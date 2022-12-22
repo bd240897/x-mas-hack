@@ -1,32 +1,17 @@
 import json
-
 import requests
 import streamlit as st
 import pandas as pd
 from catboost import CatBoostRegressor, CatBoostClassifier
 import ssl
+from ml_models.poll.catboost.PollBaseline import PollBaseline
 
 # КОНСТАНТЫ
 PATH_MODEL_WEIGHTS = "./ml_models/poll/catboost/parasites_catboost.cbm"
 BACKEND_SEND_POLL_URL = "http://127.0.0.1:8000/send/poll/"
 
 # МОДЕЛЬ
-model = CatBoostClassifier()
-model.load_model(PATH_MODEL_WEIGHTS, format='cbm')
-
-
-def predict(bad_to_eat, little_energy, rash, liquid_poop):
-    df = pd.DataFrame([[bad_to_eat, little_energy, rash, liquid_poop]],
-                      columns=["bad_to_eat", "little_energy", "rash", "liquid_poop"])
-    prediction = model.predict(df)
-
-    preds_class = model.predict(df)
-    # Get predicted probabilities for each class
-    preds_proba = model.predict_proba(df)
-    # Get predicted RawFormulaVal
-    preds_raw = model.predict(df, prediction_type='RawFormulaVal')
-    return preds_class, preds_proba, preds_raw
-
+model_catboost = PollBaseline(path_model_weight=PATH_MODEL_WEIGHTS)
 
 st.selectbox(
     'Какой тип отправки фото вы ходите?',
@@ -91,9 +76,6 @@ elif st.session_state.type_input == "send_poll_local":
     poll_answers = poll_parasites_questions()
 
     if st.button('Отправить'):
-        preds_class, preds_proba, preds_raw = predict(**poll_answers)
+        prediction = model_catboost.predict(**poll_answers)
         # st.success(prediction)
-        st.text(f"""{preds_class}
-        {preds_proba}
-        {preds_raw}
-        """)
+        st.text(f"""{prediction}""")

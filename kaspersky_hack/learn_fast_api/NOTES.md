@@ -1,1 +1,0 @@
-uvicorn upload_file:app --reload
