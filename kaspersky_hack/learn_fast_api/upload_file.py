@@ -9,7 +9,7 @@ from starlette.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 import secrets
 
-from .ml_models.ml_alexnet.BaselineClass import BaseLine
+from ml_models.ml_alexnet.BaselineClass import BaseLine
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="public", html=True))
@@ -28,18 +28,42 @@ async def create_upload_file(file: UploadFile):
         return "Ошибка чтения файла"
     return {"filename": file.filename}
 
-@app.post("/upload/")
+@app.post("/send/img/")
 async def create_upload_file(file: UploadFile):
     """Загрузка файла с нейронкой"""
 
     img = file.file
 
     # предсказание нейронки
-    model = BaseLine()
+    PATH_MODEL_WEIGHTS = "./ml_models/ml_alexnet/alexnet_waights.pth"
+    model = BaseLine(path_model_weight=PATH_MODEL_WEIGHTS)
 
     # делаем предсказание и ловим исключения в случае ошибки модели
     try:
-        prediction = model.predict_file(url=url)
+        img = Image.open(img)
+        prediction = model.predict_file_by_loaded_binary(opened_img=img)
+    except Exception as e:
+        return JSONResponse(str(e), status_code=status.HTTP_400_BAD_REQUEST)
+
+    example = {
+        "filter": {"type": prediction},
+    }
+
+    return JSONResponse(example, status_code=status.HTTP_200_OK)
+
+@app.post("/send/url/")
+async def create_upload_file(url: str = Body(embed=True)):
+    """Загрузка файла с нейронкой"""
+
+    # url = data.get("url")
+
+    # предсказание нейронки
+    PATH_MODEL_WEIGHTS = "./ml_models/ml_alexnet/alexnet_waights.pth"
+    model = BaseLine(path_model_weight=PATH_MODEL_WEIGHTS)
+
+    # делаем предсказание и ловим исключения в случае ошибки модели
+    try:
+        prediction = model.predict_file_by_url(url=url)
     except Exception as e:
         return JSONResponse(str(e), status_code=status.HTTP_400_BAD_REQUEST)
 
